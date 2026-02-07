@@ -1,0 +1,11 @@
+numpy
+pandas
+matplotlib
+arviz
+pymc
+scipy
+jupyter
+ipykernel
+Flask==3.0.0
+flask-cors==4.0.0
+
