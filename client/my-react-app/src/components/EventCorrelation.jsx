@@ -10,27 +10,29 @@ import {
   Legend
 } from "recharts";
 
-/**
- * Event component renders the price trend from the backend data.
- * Backend structure expected: [{ "Date": "20-May-87", "Price": 18.63 }, ...]
- */
 const EventCorrelation = ({ data = [] }) => {
   return (
-    <div className="w-full h-full bg-card p-6 rounded-xl border border-border shadow-sm">
+    /* FIX 1: Added 'max-w-full' and 'overflow-hidden' to ensure 
+       the container never expands beyond its parent/screen.
+    */
+    <div className="w-full max-w-full overflow-hidden bg-card p-4 sm:p-6 rounded-xl border border-border shadow-sm">
       <header className="mb-6">
-        <h3 className="text-xl font-bold tracking-tight text-foreground">
+        <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
           Brent Oil Historical Price Series
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Daily closing prices as retrieved from the database
         </p>
       </header>
 
-      <div className="h-[450px] w-full">
+      {/* FIX 2: Changed height to 'h-[300px] sm:h-[450px]' 
+         so it takes up less vertical space on mobile.
+      */}
+      <div className="h-[300px] sm:h-[450px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
-            margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
+            margin={{ top: 10, right: 10, left: -20, bottom: 0 }} // Reduced left margin for mobile
           >
             <CartesianGrid 
               strokeDasharray="3 3" 
@@ -40,19 +42,20 @@ const EventCorrelation = ({ data = [] }) => {
             
             <XAxis 
               dataKey="Date" 
-              tick={{ fontSize: 11, fill: '#888' }}
+              tick={{ fontSize: 10, fill: '#888' }}
               tickLine={false}
               axisLine={false}
-              minTickGap={60} // Prevents overlapping of "DD-MMM-YY" strings
+              minTickGap={30} // Lowered gap for better density on small screens
               interval="preserveStartEnd"
             />
             
             <YAxis 
               domain={['auto', 'auto']}
-              tick={{ fontSize: 11, fill: '#888' }}
+              tick={{ fontSize: 10, fill: '#888' }}
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `$${value}`}
+              width={40} // Fixed width for YAxis helps prevent "jumping"
             />
             
             <Tooltip 
@@ -60,7 +63,7 @@ const EventCorrelation = ({ data = [] }) => {
                 backgroundColor: '#1a1a1a', 
                 border: '1px solid #333', 
                 borderRadius: '8px',
-                fontSize: '12px' 
+                fontSize: '11px' 
               }}
               itemStyle={{ color: '#3b82f6' }}
               formatter={(value) => [`$${value}`, "Price"]}
@@ -70,7 +73,10 @@ const EventCorrelation = ({ data = [] }) => {
               verticalAlign="top" 
               align="right"
               iconType="circle"
-              wrapperStyle={{ paddingTop: '0', marginBottom: '20px' }}
+              wrapperStyle={{ 
+                paddingBottom: '10px',
+                fontSize: '11px' 
+              }}
             />
 
             <Line 
@@ -79,9 +85,9 @@ const EventCorrelation = ({ data = [] }) => {
               dataKey="Price" 
               stroke="#3b82f6" 
               strokeWidth={2}
-              dot={false} // Removed dots for a cleaner historical view
+              dot={false}
               activeDot={{ r: 4, strokeWidth: 0 }}
-              animationDuration={1500}
+              animationDuration={1000}
             />
           </LineChart>
         </ResponsiveContainer>
