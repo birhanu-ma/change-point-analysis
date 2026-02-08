@@ -1,0 +1,11 @@
+EXECUTIVE SUMMARY: BRENT OIL PRICE ANALYSIS
+==========================================
+Significant Change Detected: January 2006
+Price Shift: $22.95 -> $76.76
+Impact Magnitude: 234.5% change in average price
+
+INTERPRETATION:
+The Bayesian model has identified a high-probability structural break.
+This suggests that the market regime has fundamentally shifted, 
+moving the baseline for risk assessment and future price expectations.
+This change correlates with major geopolitical/economic events identified in the analysis.
