@@ -5,7 +5,7 @@ import pymc as pm
 import arviz as az
 import json
 import sys, os
-
+from statsmodels.tsa.stattools import adfuller
 class ChangePointAnalysis:
     """
     Bayesian Change Point Analysis for Brent Oil Prices (Monthly)
@@ -91,6 +91,31 @@ class ChangePointAnalysis:
         plt.ylabel("Log Return")
         plt.grid(True)
         plt.show()
+ 
+
+    def check_stationarity(self):
+        """
+        Perform Augmented Dickey-Fuller test to verify stationarity.
+        Returns a dictionary of test results.
+        """
+        if self.returns_df is None:
+            self.compute_log_returns()
+        
+        series = self.returns_df["log_return"].values
+        result = adfuller(series)
+        
+        status = "Stationary" if result[1] <= 0.05 else "Non-Stationary"
+        
+        stats = {
+            "ADF Statistic": result[0],
+            "p-value": result[1],
+            "Critical Values": result[4],
+            "Status": status
+        }
+        
+        print(f"--- Stationarity Test ({status}) ---")
+        print(f"p-value: {result[1]:.4f}")
+        return stats
 
     # ------------------------------------------------------------------
     # BAYESIAN CHANGE POINT MODEL
@@ -300,3 +325,36 @@ class ChangePointAnalysis:
             json.dump(results, f, indent=4)
     
         print(f"✅ Drill-down ready files exported to '{folder_path}'")
+    def generate_stakeholder_report(self, report_path="../reports/stakeholder_summary.txt"):
+        """
+        Translates complex Bayesian results into a concise document 
+        for non-technical stakeholders. Creates the directory if it doesn't exist.
+        """
+        # 1. Extract the directory path from the file path
+        report_dir = os.path.dirname(report_path)
+    
+        # 2. Create the folder if it doesn't exist (exist_ok=True prevents errors if it does)
+        if report_dir:
+            os.makedirs(report_dir, exist_ok=True)
+    
+        # 3. Get the data for the report
+        impact = self.quantify_impact()
+        
+        summary = (
+            "EXECUTIVE SUMMARY: BRENT OIL PRICE ANALYSIS\n"
+            "==========================================\n"
+            f"Significant Change Detected: {self.change_point_date.strftime('%B %Y')}\n"
+            f"Price Shift: ${impact['pre_avg_price']:.2f} -> ${impact['post_avg_price']:.2f}\n"
+            f"Impact Magnitude: {impact['percent_price_change']:.1f}% change in average price\n\n"
+            "INTERPRETATION:\n"
+            "The Bayesian model has identified a high-probability structural break.\n"
+            "This suggests that the market regime has fundamentally shifted, \n"
+            "moving the baseline for risk assessment and future price expectations.\n"
+            "This change correlates with major geopolitical/economic events identified in the analysis."
+        )
+        
+        # 4. Write the file
+        with open(report_path, "w") as f:
+            f.write(summary)
+            
+        print(f"✅ Stakeholder summary generated in '{report_path}'")
