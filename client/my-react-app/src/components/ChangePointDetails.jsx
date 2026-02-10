@@ -67,7 +67,7 @@ const ChangePointDetails = ({ changePoint, data = [] }) => {
       {/* 2. Main Price Chart */}
       <div className="w-full bg-card p-6 rounded-xl border border-border shadow-sm">
         <h3 className="text-lg font-bold mb-4 text-center">Price Series & Structural Break</h3>
-        <div className="h-[350px] w-full">
+        <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={true} stroke="rgba(255,255,255,0.05)" />
@@ -106,7 +106,7 @@ const ChangePointDetails = ({ changePoint, data = [] }) => {
         {/* Tau/Index Chart */}
         <div className="lg:col-span-3 bg-card p-6 rounded-xl border border-border shadow-sm">
           <h4 className="text-sm font-semibold mb-4 text-muted-foreground uppercase">Tau Distribution (Time Index Probability)</h4>
-          <div className="h-64">
+          <div className="h-40">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={tauData}>
                 <XAxis dataKey="index" fontSize={10} />
