@@ -12,9 +12,11 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data", "processed")
 RAW_DIR = os.path.join(BASE_DIR, "data", "raw")
+EVENT_DIRR = os.path.join(BASE_DIR, "data","raw")
 
 PRICES_FILE = os.path.join(DATA_DIR, "dashboard_prices.csv")
 EVENTS_FILE = os.path.join(DATA_DIR, "dashboard_events.csv")
+EVENTS_RAW_FILE = os.path.join(EVENT_DIRR, "events.csv")
 RAW_DATA = os.path.join(RAW_DIR, "BrentOilPrices.csv")
 MODEL_FILE = os.path.join(DATA_DIR, "model_results.json")
 
@@ -77,6 +79,7 @@ def get_summary():
     }
 
     return jsonify(summary)
+
 @app.route("/api/historical-data", methods=["GET"])
 def get_historical_data():
     """
@@ -86,6 +89,17 @@ def get_historical_data():
     if not data:
         return jsonify({"error": "Historical data file not found"}), 404
     return jsonify(data)
+
+@app.route("/api/events-data", methods=["GET"])
+def get_historical_data():
+    """
+    Serves the raw Brent Oil Price historical data
+    """
+    data = load_csv(EVENTS_RAW_FILE)
+    if not data:
+        return jsonify({"error": "Historical data file not found"}), 404
+    return jsonify(data)
+
 
 # -------------------------
 # MAIN
