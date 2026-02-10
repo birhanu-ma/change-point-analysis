@@ -91,7 +91,7 @@ def get_historical_data():
     return jsonify(data)
 
 @app.route("/api/events-data", methods=["GET"])
-def get_historical_data():
+def get_events_data():
     """
     Serves the raw Brent Oil Price historical data
     """
