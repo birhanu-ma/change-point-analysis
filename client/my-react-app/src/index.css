@@ -28,27 +28,7 @@
     --card:       0 0% 100%;
   }
     
-  @layer base {
-  html {
-    /* Increases the default browser font size (16px) to roughly 18px */
-    font-size: 112.5%; 
-    @apply scroll-smooth;
-  }
-
-  body {
-    /* Alternatively, set a specific size for all body text */
-    @apply bg-background text-foreground transition-colors duration-300 text-lg; 
-    
-    /* This ensures a baseline readable size for all standard text */
-    line-height: 1.6;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  /* Target headers specifically if they also feel too small */
-  h1 { @apply text-4xl font-bold mb-4; }
-  h2 { @apply text-3xl font-semibold mb-3; }
-  h3 { @apply text-2xl font-medium mb-2; }
-}
+  
 
   /* Dark-mode overrides */
   .dark {
